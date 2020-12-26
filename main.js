@@ -151,7 +151,8 @@ const pAequorServivors = [];
 
 while(pAequorServivors.length !== 30) {
   let item = pAequorFactory(count,mockUpStrand())
-  if (item.willLikelySurvive()) {
+  //makes sure a duplicate entry doesn't exist in pAeuorServivors and that the specimen will survive
+  if (item.willLikelySurvive() && pAequorServivors.indexOf(item.dna) === -1) {
     pAequorServivors.push(item)
     count++
   }
