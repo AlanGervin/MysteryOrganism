@@ -31,105 +31,96 @@ function pAequorFactory(number,dnaArray) {
       }
       
     })
-    console.log('percent G length:')
-    console.log(percentG.length)
-    console.log('percent C length:')
-    console.log(percentC.length)
-    console.log('percent')
-    console.log(percentC.length/15*100)
     if ((percentC.length/15)*100 >= 60) {
       console.log('percent')
       console.log(percentC.length/15*100)
       return true
     }
-    console.log('percent')
-    console.log(percentC.length/15*100)
     if ((percentG.length/15)*100 >= 60) {
       console.log('percent')
       console.log(percentG.length/15*100)
       return true
     }
     return false
-  }
+    },
+    mutate: function () {
+      let count = 0 
+  
+      let randomNumber = Math.floor(Math.random() * dna.dna.length);
+      console.log(randomNumber)
+      
+      console.log(dna)
+      //dnb = Object.create(dna)
+      let originalDna = dna[randomNumber]
+      let changedDna = returnRandBase();
+      while (originalDna === changedDna) {
+        changedDna = returnRandBase();
+      }
+      dna.dna[randomNumber] = changedDna
+      //dnb.dna[randomNumber] = changedDna
+      console.log(this.dna.dna)
+      return dna
+    },
+    compareDNA: function (dnaObject) {
+      let count = 0;
+      for (let i = 0; i < dna.dna.length; i++) {
+        if (this.dna[i] === dnaObject.dna[i]) {
+          count++
+        }  
+      }
+      let percentSame = Math.floor((count/dna.dna.length)*100)
+      console.log(`Specimen #${dna.specimenNum} and specimen #${dnaObject.specimenNum} are ${percentSame}% the Same`)
+    },
+    willLikelySurvive: function () {
+      let percentC = []
+      let percentG = []
+      this.dna.forEach(base => {
+        if (base === 'C') {
+          percentC.push(base)
+        }
+        if (base === 'G') {
+          percentG.push(base)
+        }
+        
+      })
+      //uncomment the following code block to see percent of each try if under 60%
+      /*
+      console.log('percent G length:')
+      console.log(percentG.length)
+      console.log('percent C length:')
+      console.log(percentC.length)
+      */
+      //console.log(percentC.length/15*100)
+      if (((percentC.length/15)*100) >= 60) {
+        console.log('percent')
+        console.log(percentC.length/15*100)
+        return true
+      }
+      
+      //console.log(percentG.length/15*100)
+      if (((percentG.length/15)*100) >= 60) {
+        console.log('percent')
+        console.log(percentG.length/15*100)
+        return true
+      }
+      return false
+    }
   
   
   }
 }
 
-let dna = pAequorFactory(1,mockUpStrand())
+let dna = pAequorFactory(1,['C','C','C','C','C','C','C','C','C','C','C','C','C','C','C'])
 let dnb = pAequorFactory(2,mockUpStrand())
 
-dna.mutate = function () {
-    let count = 0 
-
-    let randomNumber = Math.floor(Math.random() * dna.dna.length);
-    console.log(randomNumber)
-    
-    console.log(dna.dna)
-    //dnb = Object.create(dna)
-    let originalDna = dna[randomNumber]
-    let changedDna = returnRandBase();
-    while (originalDna === changedDna) {
-      changedDna = returnRandBase();
-    }
-    dna.dna[randomNumber] = changedDna
-    //dnb.dna[randomNumber] = changedDna
-    console.log(dna.dna)
-    return dna
-}
-
-
-dna.compareDNA = function (dnaObject) {
-  let count = 0;
-  for (let i = 0; i < dna.dna.length; i++) {
-    if (dna.dna[i] === dnaObject.dna[i]) {
-      count++
-    }  
-  }
-  let percentSame = Math.floor((count/dna.dna.length)*100)
-  console.log(`Specimen #${dna.specimenNum}} and specimen #${dnaObject.specimenNum} are ${percentSame}% the Same`)
-}
-/*
-dna.willLikelySurvive = function () {
-  let percentC = []
-  let percentG = []
-  dna.dna.forEach(base => {
-    if (base === 'C') {
-      percentC.push(base)
-    }
-    if (base === 'G') {
-      percentG.push(base)
-    }
-    
-  })
-  console.log('percent G length:')
-  console.log(percentG.length)
-  console.log('percent C length:')
-  console.log(percentC.length)
-  console.log('percent')
-  console.log(percentC.length/15*100)
-  if ((percentC.length/15)*1000 >= 60) {
-    console.log('percent')
-    console.log(percentC.length/15*100)
-    return true
-  }
-  console.log('percent')
-  console.log(percentG.length/15*100)
-  if ((percentG.length/15)*100 >= 60) {
-    console.log('percent')
-    console.log(percentG.length/15*100)
-    return true
-  }
-  return false
-}
 
 console.log('start dns')
 console.log(dna.dna)
 
-console.log('mutate')
 
 let mutated = dna.mutate()
-console.log(mutated)
+console.log('mutated')
+console.log(dna.mutated)
 
 
 console.log('dna a')
@@ -139,31 +130,28 @@ console.log('dba b')
 console.log(dnb.dna)
 
 dna.compareDNA(dnb)
-
 console.log('will survive')
-*/
-let control = false;
 
 
 var count = 1
 
+//Array with servivors species in it.
 const pAequorServivors = [];
+
 
 while(pAequorServivors.length !== 30) {
   let item = pAequorFactory(count,mockUpStrand())
   //makes sure a duplicate entry doesn't exist in pAeuorServivors and that the specimen will survive
   if (item.willLikelySurvive() && pAequorServivors.indexOf(item.dna) === -1) {
-    pAequorServivors.push(item)
+    pAequorServivors.push(item.dna)
+    console.log(item.willLikelySurvive())
+    console.log(item.dna)
     count++
   }
-  console.log(item.willLikelySurvive())
-  console.log(item.dna)
+
 }
 
+console.log('Array Length:')
 console.log(pAequorServivors.length)
 
-
-
-
 console.log(pAequorServivors)
-//mutated = dna.mutate()
